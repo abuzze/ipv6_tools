@@ -18,23 +18,7 @@ def normalize_to_hex(address):
 		words.append(block.strip()[2:])
 	return words
 
-def print_networkpart(address,prefix):
-	#mask_string="0"*(128-int(prefix)) #the mask for the ipaddress
-	mask_string="0"*64
-	print mask_string
-	mask = bin(int(mask_string,2))
-	print mask
-	binary= convert_bin(address).replace(".","")#converting the address to binary
-	address_bin= bin(int(binary,2))
-	hostpart=address_bin | mask
-	#print hostpart
-	
-	a = 0b111 # 6 
-	mask = 0b0 # 1 
-	desired = a | mask # 0b111, or 7
 
-
-	return bin(int(binary,2))
 
 def convert_singlehex(address):
 	'''coverts an ipv6 address from a : separated string to a . separated string'''
@@ -70,9 +54,22 @@ def convert_decimal(address):
 def print_address(address,prefix):
 	print "Got this address:",address,"/",prefix
 
+def get_prefix(address,prefix):
+	bin_addr = convert_bin(address)
+	return bin_addr[:int(prefix)]
+
+def get_int_identifier(address,prefix):
+	bin_addr = convert_bin(address)
+	return bin_addr[int(prefix):]
+
+def convert_bin_to_hex(address):
+	return hex(int(address))[2:]
+
 def address_info(address,prefix):
 	'''examins the address and displays the type of the ipv6 address, link local, eg.'''
 	pass
+
+
 
 def main(argv=None):
 	addr=""
@@ -95,8 +92,8 @@ def main(argv=None):
 	print "in Decimal:",convert_decimal(addr)
 	print "in Hex:", convert_singlehex(addr)
 	print "in Binary:", convert_bin(addr)
-	print print_networkpart(addr,prefix)
-	#print address_info(addr,prefix)
+	print "Praefix in Binary", get_prefix(addr,prefix)
+	print "Interface Identifier in Binary", get_int_identifier(addr,prefix)
 
 if __name__ == "__main__":
 	main()
